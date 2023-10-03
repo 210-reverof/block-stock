@@ -18,6 +18,7 @@ from domain.contest.models.contest import Contest, Participate, ContestRealTime
 from domain.contest.error.contest_exception import StatusCode, Message
 from common.conn import engineconn
 from datetime import datetime
+from domain.member.services.member_service import *
 
 from domain.option.models.option import Option
 
@@ -126,7 +127,18 @@ def delete_contest(contest_id: int):
     session.close()
 
 
-def participate_contest(member_id: int, info_create: InfoRequest):
+async def participate_contest(member_id: int, info_create: InfoRequest):
+    print("==============service in")
+    if not is_key_exists(member_id):
+        print("============== not")
+        member = await req_member_data(member_id)
+        save_member_data(member)
+
+    if is_key_exists(member_id):
+        print("============== yes")
+        print(get_member_data(member_id))
+        print("============== yes")
+
     engine = engineconn()
     session = engine.sessionmaker()
     contest_ticket = session.get(Contest, info_create.contest_id).ticket

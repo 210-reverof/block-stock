@@ -37,9 +37,9 @@ def enroll_contest(contest_create: ContestRequest):
 
 
 @router.post("/participate")
-def participate_contest(request: Request, info_create: InfoRequest):
+async def participate_contest(request: Request, info_create: InfoRequest):
     member_id = request.headers.get("Member-id")
-    contest_service.participate_contest(member_id, info_create)
+    await contest_service.participate_contest(member_id, info_create)
 
 
 @router.delete("/participate/{contest_id}")

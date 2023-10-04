@@ -1,8 +1,8 @@
 import _thread
+import asyncio
 import json
 import math
 import os
-import time
 import pandas as pd
 import requests
 import schedule
@@ -12,15 +12,15 @@ from datetime import datetime, timedelta
 from domain.contest.models.trade import Trade
 from apscheduler.schedulers.background import BackgroundScheduler
 from domain.contest.models.contest import Contest, Participate, Tactic, ContestRealTime
+from infra.kafka.tactic_producer import produce_contest_end
 
 sched = BackgroundScheduler(timezone='Asia/Seoul')
 
 engine = engineconn()
 
 
-def contest_thread(participate: Participate):
-    print("=============contest_thread===============", participate.member_id)
-
+async def contest_thread(participate: Participate):
+    engine = engineconn()
     session_thread = engine.sessionmaker()
 
     real_data = (session_thread.query(ContestRealTime.open,
@@ -245,14 +245,16 @@ def start_contest(session,
 
         session.commit()
 
-        # 멀티스레드
-        for participate in participates:
-            print(">>>>>>>>>>>>>>", participate.member_id)
-
-            _thread.start_new_thread(contest_thread, (participate,))
+        await asyncio.gather(*[contest_thread(participate) for participate in participates])
 
         schedule.run_pending()
-        time.sleep(15)  # 부하가 안생길 만큼의 초
+        await asyncio.sleep(15)
 
-    # 대회 참가자들 정보는 participates에 있음!
-    print("대회 끝!!!!")
+    sorted_participants = sorted(participates, key=lambda x: x.result_money, reverse=True)
+    member_ids = []
+    results = []
+    for participant in sorted_participants:
+        member_ids.append(participant.member_id)
+        results.append(participant.result_money)
+    await produce_contest_end(contest_info.id, contest_info.title, member_ids, results)
+

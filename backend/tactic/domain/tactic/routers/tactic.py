@@ -6,11 +6,17 @@ from domain.tactic.schemas.tactic_test_request import TacticTestRequest
 from domain.tactic.schemas.tactic_test_response import TacticTestResponse
 from domain.tactic.services.tactic_test_service import get_tactic_test_response
 from domain.tactic.services.tactic_service import create_tactic, get_member_tactic, modify_tactic, delete_tactic, get_tactic_detail, create_tactic_img
+from infra.kafka.tactic_producer import *
 from typing import Optional
 
 app = APIRouter(
     prefix="/api/tactic"
 )
+
+
+@app.post("/test-kafka")
+async def tactic_test():
+    await produce_contest_end(7, "네이버 대회", [20, 34], [1000, 2300])
 
 
 @app.post("/test")

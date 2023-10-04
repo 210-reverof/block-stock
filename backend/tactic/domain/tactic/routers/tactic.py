@@ -14,9 +14,16 @@ app = APIRouter(
 )
 
 
-@app.post("/test")
+@app.post("/test-kafka")
 async def tactic_test():
-    await produce_contest_end()
+    await produce_contest_end(7, "네이버 대회", [20, 34], [1000, 2300])
+
+
+@app.post("/test")
+async def tactic_test(tactic_test_request: TacticTestRequest):
+    response = get_tactic_test_response(tactic_test_request)
+
+    return response
 
 
 @app.post("/image")

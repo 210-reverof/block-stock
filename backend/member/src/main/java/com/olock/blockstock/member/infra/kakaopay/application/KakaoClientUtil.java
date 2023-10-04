@@ -1,4 +1,4 @@
-package com.olock.blockstock.member.infra.kakaopay.service;
+package com.olock.blockstock.member.infra.kakaopay.application;
 
 import com.olock.blockstock.member.global.config.WebClientConfig;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.olock.blockstock.member.infra.kakaopay.service;
+package com.olock.blockstock.member.infra.kakaopay.application;
 
 import com.olock.blockstock.member.infra.kakaopay.dto.KakaoApproveRequest;
 import com.olock.blockstock.member.infra.kakaopay.dto.KakaoApproveResponse;
@@ -25,7 +25,7 @@ public class KakaoPayService {
         return kakaoReady;
     }
 
-    public KakaoApproveResponse ApproveResponse(String pgToken) {
+    public KakaoApproveResponse approveResponse(String pgToken) {
         KakaoApproveResponse approveResponse = kakaoClientUtil.post(
                 "https://kapi.kakao.com/v1/payment/approve",
                 getApproveRequest(pgToken),

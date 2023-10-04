@@ -33,7 +33,6 @@ async def contest_thread(participate: Participate):
 
     real_data = pd.DataFrame(real_data.all(), columns=['2', '3', '4', '5', '6'])
 
-
     def cal_now_stock_cnt():
         # 이제까지 매매한 내용 보면서 buy일 때는 trade_cnt 더해주기
         sell_cnt = (session_thread.query(func.sum(Trade.trade_cnt))
@@ -162,9 +161,9 @@ async def contest_thread(participate: Participate):
 
 # 9시부터 15시까지 1분 마다 실행하는 것으로 바꾸기
 @sched.scheduled_job('interval', seconds=60, id='remove_inactive_image')
-def check_contest():
+async def check_contest():
     session = engine.sessionmaker()
-    
+
     # 임시로 0으로 함 (30으로 바꿔야 됨)
     now_formatted = (datetime.now() + timedelta(minutes=0)).strftime('%Y-%m-%d %H:%M')
 
@@ -177,7 +176,7 @@ def check_contest():
         # 참여하는 사람들
         participates = session.query(Participate).filter(Participate.contest_id == cur_contest.id).all()
 
-        start_contest(session,
+        await start_contest(session,
                       contest_info=cur_contest,
                       participates=participates)
 
@@ -188,7 +187,7 @@ def check_contest():
 sched.start()
 
 
-def start_contest(session,
+async def start_contest(session,
                   contest_info: Contest,
                   participates: Participate):
     headers = {"content-type": "application/json"}
@@ -253,6 +252,7 @@ def start_contest(session,
     sorted_participants = sorted(participates, key=lambda x: x.result_money, reverse=True)
     member_ids = []
     results = []
+
     for participant in sorted_participants:
         member_ids.append(participant.member_id)
         results.append(participant.result_money)

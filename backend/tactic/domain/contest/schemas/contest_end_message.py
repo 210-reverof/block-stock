@@ -1,8 +1,5 @@
 from typing import Optional
 
-from domain.contest.models.contest import ContestRealTime
-from datetime import datetime
-
 
 class ContestEndMessage:
     message: Optional[str] = None
@@ -10,3 +7,12 @@ class ContestEndMessage:
     contestTitle: Optional[str] = None
     memberIds: Optional[list] = None
     results: Optional[list] = None
+
+    def to_dict(self):
+        return {
+            "message": self.message,
+            "contestId": self.contestId,
+            "contestTitle": self.contestTitle,
+            "memberIds": self.memberIds,
+            "results": self.results
+        }

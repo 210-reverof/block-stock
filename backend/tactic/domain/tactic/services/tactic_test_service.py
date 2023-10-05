@@ -4,6 +4,7 @@ import datetime
 
 import win32com.client
 
+from common.exception.timeout import timeout
 from domain.tactic.schemas.chart_info_response import ChartInfo
 from domain.tactic.schemas.option_history_response import OptionHistory
 from domain.tactic.schemas.tactic_test_request import TacticTestRequest
@@ -71,6 +72,7 @@ now_repeat_cnt = 0
 recent_indicators_data = 0
 
 
+@timeout(10)
 def get_tactic_test_response(tactic_test_request):
     inst_cp_stock_code = win32com.client.Dispatch("CpUtil.CpStockCode")
     name = inst_cp_stock_code.CodeToName(tactic_test_request.optionCode)

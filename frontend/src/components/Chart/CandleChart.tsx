@@ -191,6 +191,11 @@ const CandleChart = (props) => {
     // console.log(date + " " + time)
     let flag = false;
     props.optionHistory.forEach((element) => {
+      console.log('테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네')
+      console.log('테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네')
+      console.log(element,'테스트 기간을 길게 하면 에러 나네')
+      console.log('테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네')
+      console.log('테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네테스트 기간을 길게 하면 에러 나네')
       if (
         data[element.turn + 100].date === date &&
         data[element.turn + 100].time === time &&

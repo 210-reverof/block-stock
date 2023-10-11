@@ -54,6 +54,7 @@ function CurrentContest({contestItem}){
     setType('proceed')
     navigate('/contestlist')
   }
+
   return(
     <Container>
       <CurrentContestTitle>

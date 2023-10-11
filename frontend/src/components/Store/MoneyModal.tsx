@@ -14,7 +14,7 @@ import {
   SubmitBtn,
   Message
  } from "./MoneyModal.style";
-
+import {kakaoPay} from '../../api/MyPage/KakaoPay'
 interface MoneyModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -47,9 +47,11 @@ function MoneyModal(props: MoneyModalProps) {
         if (amount <= 2000) {
           console.log("충전 금액:", amount);
           const moneyData = {
-            money: amount*10000
+            money: amount
           }; // 카카오페이 연결할 때 밑에 코드는 주석처리하고 안써도 되는 부분!
-          const response = await putMoney(moneyData);
+
+          const response = await kakaoPay(moneyData);
+          console.log(response)
           if (response?.status == 200){
             swal("충전 완료",`${moneyData.money}원이 충전되었습니다.`, "success")
             handleCancel()
